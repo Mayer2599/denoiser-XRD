@@ -1,0 +1,386 @@
+# XRD DENOISING AI - COMPLETE TRAINING SCRIPTS
+# =============================================
+
+## 📦 DAFTAR FILE YANG DIBUAT
+
+### 1. CORE TRAINING SCRIPTS
+
+#### 4_split_dataset.py
+- **Fungsi:** Split dataset menjadi training (80%) dan validation (20%)
+- **Input:** data/processed/clean dan data/processed/noisy
+- **Output:** data/processed/train/* dan data/processed/val/*
+- **Command:**
+  ```bash
+  python 4_split_dataset.py --clean_dir data/processed/clean --noisy_dir data/processed/noisy
+  ```
+
+#### xrd_dataset.py
+- **Fungsi:** PyTorch Dataset dan DataLoader untuk XRD data
+- **Features:**
+  - Anscombe transform untuk variance stabilization
+  - Normalization ke range [0, 1]
+  - Automatic data resampling ke 8500 points
+  - Support for batched data loading
+- **Command (test):**
+  ```bash
+  python xrd_dataset.py
+  ```
+
+#### models.py
+- **Fungsi:** Definisi arsitektur model
+- **Models:**
+  - SimpleCNN1D: Fast, moderate performance (~1.5M parameters)
+  - UNet1D: Better performance, slower (~8M parameters)
+- **Command (test):**
+  ```bash
+  python models.py
+  ```
+
+#### config.py
+- **Fungsi:** Configuration management untuk training
+- **Settings:**
+  - Data paths
+  - Model hyperparameters
+  - Training parameters
+  - Device settings
+- **Usage:** Import dan gunakan Config class
+
+#### train_denoiser.py ⭐ MAIN TRAINING SCRIPT
+- **Fungsi:** Main script untuk training model
+- **Features:**
+  - Full training pipeline
+  - Automatic checkpointing
+  - Early stopping
+  - Learning rate scheduling
+  - Loss plotting
+  - TensorBoard support (optional)
+- **Commands:**
+  ```bash
+  # Test mode (5 epochs, small dataset)
+  python train_denoiser.py --test_mode --epochs 5
+  
+  # Full training
+  python train_denoiser.py --model unet --epochs 100 --batch_size 16
+  
+  # Resume training
+  python train_denoiser.py --resume checkpoints/checkpoint_epoch_50.pth
+  ```
+
+### 2. EVALUATION SCRIPTS
+
+#### evaluate_model.py
+- **Fungsi:** Comprehensive model evaluation
+- **Metrics:**
+  - SNR (Signal-to-Noise Ratio)
+  - PSNR (Peak SNR)
+  - MSE (Mean Squared Error)
+  - MAE (Mean Absolute Error)
+  - SSIM (Structural Similarity Index)
+- **Outputs:**
+  - detailed_results.csv
+  - statistics.csv
+  - denoising_examples.png
+  - metric_distributions.png
+- **Command:**
+  ```bash
+  python evaluate_model.py \
+      --model models/saved/best_model.pth \
+      --data_clean data/processed/val/clean \
+      --data_noisy data/processed/val/noisy \
+      --output_dir evaluation_results
+  ```
+
+#### analyze_failures.py
+- **Fungsi:** Analyze worst performing samples
+- **Features:**
+  - Identify failure patterns
+  - Plot worst and best cases
+  - Generate improvement recommendations
+- **Command:**
+  ```bash
+  python analyze_failures.py \
+      --model models/saved/best_model.pth \
+      --data_clean data/processed/val/clean \
+      --data_noisy data/processed/val/noisy \
+      --output_dir failure_analysis
+  ```
+
+### 3. INFERENCE SCRIPTS
+
+#### denoise_xrd.py
+- **Fungsi:** Denoise single XRD file
+- **Features:**
+  - Load model and denoise
+  - Create comparison plot
+  - Save denoised file
+- **Command:**
+  ```bash
+  python denoise_xrd.py \
+      --model models/saved/best_model.pth \
+      --input path/to/noisy.txt \
+      --output path/to/denoised.txt \
+      --plot
+  ```
+
+#### batch_denoise.py
+- **Fungsi:** Batch denoise multiple files
+- **Features:**
+  - Process entire folders
+  - Progress tracking
+  - Summary statistics
+  - Distribution plots
+- **Command:**
+  ```bash
+  python batch_denoise.py \
+      --model models/saved/best_model.pth \
+      --input_folder data/tests/my_data \
+      --output_folder results/denoised \
+      --plots
+  ```
+
+### 4. UTILITY SCRIPTS
+
+#### monitor_training.py
+- **Fungsi:** Real-time training monitoring
+- **Features:**
+  - Live loss plotting
+  - Anomaly detection
+  - TensorBoard integration (optional)
+- **Usage:** Import TrainingMonitor class atau jalankan standalone
+
+#### quick_start.py
+- **Fungsi:** Quick setup verification
+- **Features:**
+  - Check system requirements
+  - Verify data
+  - Display next steps
+- **Command:**
+  ```bash
+  python quick_start.py
+  ```
+
+#### xrd_denoiser.py ⭐ MASTER CLI TOOL
+- **Fungsi:** Unified command-line interface
+- **Commands:**
+  - `split` - Split dataset
+  - `train` - Train model
+  - `evaluate` - Evaluate model
+  - `denoise` - Denoise single file
+  - `batch` - Batch processing
+  - `analyze` - Failure analysis
+  - `info` - System info
+- **Examples:**
+  ```bash
+  # Split dataset
+  python xrd_denoiser.py split --clean_dir data/processed/clean --noisy_dir data/processed/noisy
+  
+  # Train
+  python xrd_denoiser.py train --model unet --epochs 100
+  
+  # Evaluate
+  python xrd_denoiser.py evaluate --model models/saved/best_model.pth --data_clean data/processed/val/clean --data_noisy data/processed/val/noisy
+  
+  # Denoise
+  python xrd_denoiser.py denoise --model models/saved/best_model.pth --input file.txt
+  
+  # Batch
+  python xrd_denoiser.py batch --model models/saved/best_model.pth --input_folder data/tests --output_folder results
+  ```
+
+### 5. DOCUMENTATION
+
+#### README.md
+- Comprehensive documentation
+- Complete setup guide
+- Training pipeline walkthrough
+- Troubleshooting tips
+- Expected results
+
+#### requirements.txt
+- Python package dependencies
+- Install with: `pip install -r requirements.txt`
+
+## 🚀 QUICK START WORKFLOW
+
+### 1. Setup Environment
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Verify setup
+python quick_start.py
+```
+
+### 2. Prepare Data
+```bash
+# Split dataset (assuming steps 1-3 completed)
+python 4_split_dataset.py
+```
+
+### 3. Test Training (5 epochs)
+```bash
+python train_denoiser.py --test_mode --epochs 5 --batch_size 8
+```
+
+### 4. Full Training
+```bash
+# With GPU (recommended)
+python train_denoiser.py --model unet --epochs 100 --batch_size 16 --device cuda
+
+# With CPU (very slow!)
+python train_denoiser.py --model simple_cnn --epochs 50 --batch_size 4 --device cpu
+```
+
+### 5. Evaluate Model
+```bash
+python evaluate_model.py \
+    --model models/saved/best_model.pth \
+    --data_clean data/processed/val/clean \
+    --data_noisy data/processed/val/noisy
+```
+
+### 6. Use for Inference
+```bash
+# Single file
+python denoise_xrd.py --model models/saved/best_model.pth --input noisy.txt
+
+# Batch
+python batch_denoise.py --model models/saved/best_model.pth --input_folder data/tests --output_folder results
+```
+
+## 📊 EXPECTED OUTPUT STRUCTURE
+
+```
+xrdAI_withoutmatch3_v2/
+│
+├── data/
+│   └── processed/
+│       ├── train/
+│       │   ├── clean/ (19,334 files)
+│       │   └── noisy/ (19,334 files)
+│       └── val/
+│           ├── clean/ (4,834 files)
+│           └── noisy/ (4,834 files)
+│
+├── models/
+│   └── saved/
+│       └── best_model.pth
+│
+├── checkpoints/
+│   ├── checkpoint_epoch_10.pth
+│   ├── checkpoint_epoch_20.pth
+│   └── ...
+│
+├── logs/
+│   ├── training_history.json
+│   ├── training_curves.png
+│   └── tensorboard/ (optional)
+│
+├── evaluation_results/
+│   ├── detailed_results.csv
+│   ├── statistics.csv
+│   ├── denoising_examples.png
+│   └── metric_distributions.png
+│
+└── results/
+    └── denoised/ (processed files)
+```
+
+## ⏱️ ESTIMATED TIMELINE
+
+1. **Data Split:** 5-10 minutes
+2. **Test Training (5 epochs):** 15-30 minutes
+3. **Full Training:**
+   - GPU (GTX 1060+): 8-24 hours
+   - CPU: 3-7 days (NOT RECOMMENDED!)
+4. **Evaluation:** 10-30 minutes
+5. **Batch Processing (1000 files):** 30-60 minutes
+
+## 💡 KEY FEATURES
+
+### Training
+- ✅ Automatic checkpointing every 5 epochs
+- ✅ Early stopping (patience: 10 epochs)
+- ✅ Learning rate scheduling
+- ✅ GPU acceleration support
+- ✅ Resume from checkpoint
+- ✅ TensorBoard logging (optional)
+
+### Data Handling
+- ✅ Paired clean-noisy data verification
+- ✅ Automatic resampling to uniform length
+- ✅ Anscombe transform for variance stabilization
+- ✅ Min-max normalization
+- ✅ Efficient data loading with multiprocessing
+
+### Model Architectures
+- ✅ SimpleCNN1D: Fast, ~1.5M params
+- ✅ UNet1D: Better performance, ~8M params
+- ✅ Flexible base channels (32, 64, 128)
+
+### Evaluation Metrics
+- ✅ SNR (Signal-to-Noise Ratio)
+- ✅ PSNR (Peak SNR)
+- ✅ MSE (Mean Squared Error)
+- ✅ MAE (Mean Absolute Error)
+- ✅ SSIM (Structural Similarity)
+
+### Inference
+- ✅ Single file denoising
+- ✅ Batch processing
+- ✅ Automatic plot generation
+- ✅ Progress tracking
+
+## 🛠️ TROUBLESHOOTING
+
+### CUDA Out of Memory
+```bash
+# Reduce batch size
+python train_denoiser.py --batch_size 8  # or 4
+```
+
+### Training Too Slow
+- Use GPU! (Google Colab free)
+- Or use SimpleCNN: `--model simple_cnn`
+
+### Loss Not Decreasing
+- Lower learning rate: `--lr 0.0005`
+- Try different model: `--model unet`
+
+### Loss Becomes NaN
+- Much lower learning rate: `--lr 0.0001`
+- Check data quality
+
+## 📞 SUPPORT
+
+Jika mengalami masalah:
+1. Cek error message dengan teliti
+2. Verify semua paths benar
+3. Test dengan `--test_mode` dulu
+4. Check training curves di logs/
+
+## ✅ SUCCESS CRITERIA
+
+### Good Model:
+- SNR Improvement > 8 dB
+- Validation Loss < 0.01
+- SSIM > 0.85
+
+### Excellent Model:
+- SNR Improvement > 12 dB
+- Validation Loss < 0.005
+- SSIM > 0.90
+
+## 🎯 NEXT STEPS AFTER TRAINING
+
+1. ✅ Evaluate on validation set
+2. ✅ Test on real data (amorf, background, extreme_noise)
+3. ✅ Analyze failure cases
+4. ✅ If needed: retrain with improvements
+5. ✅ Deploy for production use
+
+---
+
+**SEMUA SCRIPT SUDAH SIAP DIGUNAKAN!** 🚀
+
+Mulai dengan: `python quick_start.py` untuk verifikasi setup Anda.

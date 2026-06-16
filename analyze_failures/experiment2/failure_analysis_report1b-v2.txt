@@ -1,0 +1,94 @@
+================================================================================
+FAILURE CASE ANALYSIS REPORT
+================================================================================
+
+Total Samples Analyzed: 4832
+Analysis Date: 2026-02-03 21:07:23
+
+--------------------------------------------------------------------------------
+GLOBAL STATISTICS
+--------------------------------------------------------------------------------
+SNR Improvement (mean ± std): 3.68 ± 5.68 dB
+SNR Improvement (median): 5.50 dB
+SNR Improvement (min): -21.56 dB
+SNR Improvement (max): 13.59 dB
+MSE (mean): 0.020228
+MSE (median): 0.011476
+
+--------------------------------------------------------------------------------
+WORST PERFORMING SAMPLES (Top 10)
+--------------------------------------------------------------------------------
+Rank   SNR Improv.     SNR Before      SNR After       MSE          MAE         
+--------------------------------------------------------------------------------
+1      -21.56          31.85           10.29           0.042895     0.198386    
+2      -19.39          29.92           10.53           0.047160     0.212019    
+3      -18.27          29.83           11.56           0.038429     0.190353    
+4      -17.53          29.64           12.11           0.038805     0.191909    
+5      -17.46          28.83           11.37           0.041688     0.199110    
+6      -17.27          27.44           10.17           0.034887     0.180827    
+7      -16.97          27.60           10.63           0.036847     0.183988    
+8      -16.65          27.73           11.08           0.045320     0.204185    
+9      -16.38          27.51           11.13           0.042190     0.200234    
+10     -16.37          27.21           10.84           0.037635     0.181510    
+
+--------------------------------------------------------------------------------
+BEST PERFORMING SAMPLES (Top 5) - FOR COMPARISON
+--------------------------------------------------------------------------------
+Rank   SNR Improv.     SNR Before      SNR After       MSE          MAE         
+--------------------------------------------------------------------------------
+1      13.59           -0.29           13.30           0.003718     0.041070    
+2      13.44           -4.91           8.53            0.004468     0.050699    
+3      13.22           -3.41           9.80            0.003940     0.050055    
+4      13.12           -2.56           10.57           0.002628     0.037384    
+5      13.08           -3.52           9.56            0.005028     0.051983    
+
+--------------------------------------------------------------------------------
+FAILURE PATTERN ANALYSIS
+--------------------------------------------------------------------------------
+• Extreme values (intensity >95% atau <5%): 10/10 cases (100%)  ← CRITICAL!
+• Peak distortion (error pada peak regions): 4/10 cases (40%)  ← SIGNIFICANT
+• High noise level (relatif): 2/10 cases (20%) 
+• Low signal strength: 0/10 cases (0%) 
+
+--------------------------------------------------------------------------------
+XR D-SPECIFIC RECOMMENDATIONS
+--------------------------------------------------------------------------------
+
+⚠️  CRITICAL ISSUE: Extreme values dominate failures (100%)
+   Recommended actions:
+   1. Preprocessing enhancement:
+      - Apply robust normalization (e.g., RobustScaler) instead of MinMaxScaler
+      - Clip extreme outliers (>99.5 percentile) BEFORE training
+      - Consider log-transform for high-intensity regions
+   2. Loss function modification:
+      - Replace MSE with Huber loss (less sensitive to outliers)
+      - Add weighted loss: higher weight for extreme value regions
+   3. Data augmentation:
+      - Synthetically generate more samples with extreme values
+      - Apply random clipping to simulate extreme value scenarios
+
+⚠️  PEAK PRESERVATION ISSUE: 40% of failures show peak distortion
+   Recommended actions:
+   1. Architecture modification:
+      - Increase skip connection weights in UNet
+      - Add attention gates focused on peak regions
+   2. Loss function enhancement:
+      - Add peak-preserving loss term:
+        L_total = L_mse + λ * L_peak
+        where L_peak = MSE only on detected peak regions
+   3. Post-processing:
+      - Apply peak-aware smoothing after denoising
+
+--------------------------------------------------------------------------------
+GENERAL RECOMMENDATIONS FOR NEXT EXPERIMENT
+--------------------------------------------------------------------------------
+✅ DO: Continue with Experiment 3 (UNet + Lower LR) - already showing promise
+✅ DO: Add extreme value preprocessing BEFORE Experiment 4
+✅ DO: Implement Huber loss instead of MSE for robustness
+⚠️  CAUTION: Avoid Experiment 4 (Larger Channels) WITHOUT fixing extreme value issue first
+   → Larger capacity will memorize extreme outliers instead of generalizing
+💡 PRO TIP: For XRD specifically, peak preservation > overall MSE reduction
+
+================================================================================
+END OF REPORT
+================================================================================

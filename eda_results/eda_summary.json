@@ -1,0 +1,444 @@
+{
+  "dataset_info": {
+    "total_files": 24168,
+    "file_extensions": {
+      ".txt": 29,
+      ".xy": 24074,
+      ".xye": 61,
+      ".ASC": 1,
+      ".asc": 3
+    },
+    "data_directory": "C:\\Users\\COMPUTER\\Documents\\xrdAI_withoutmatch3_v2\\data\\train\\clean"
+  },
+  "statistics": {
+    "num_points": {
+      "min": 1508,
+      "max": 1857,
+      "mean": 1577.8,
+      "median": 1508.0,
+      "std": 139.6
+    },
+    "two_theta_range": {
+      "min_start": 3.448652719,
+      "max_end": 31.06935489,
+      "avg_range": 25.750041914400004
+    },
+    "intensity": {
+      "min": 0.0,
+      "max": 7511.255859,
+      "avg_mean": 3550.580642458904,
+      "avg_std": 794.7133441815879
+    },
+    "file_size_kb": {
+      "min": 30.142578125,
+      "max": 50.7470703125,
+      "mean": 46.028125
+    }
+  },
+  "quality_check": {
+    "success_rate": "2.50%",
+    "error_count": 195,
+    "error_files": [
+      {
+        "filename": "INT_pattern_9269.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_16508.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_5822.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_9467.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "CNRS_pattern_304.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_1481.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_17047.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_6859.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_15885.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_10174.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_3749.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_13047.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_6356.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_16121.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_4221.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "HKUST_B_pattern_248.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "CNRS_pattern_514.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "EMPA_pattern_342.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_13715.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_7152.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_6782.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_25.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_10660.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_17573.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_708.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_11999.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_14314.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_19210.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_5738.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "HKUST_B_pattern_121.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_10314.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "EMPA_pattern_102.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "EMPA_pattern_226.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "LBNL_D_pattern_group_0_477.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_4224.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_12170.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "LBNL_D_pattern_group_0_583.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "LBNL_D_pattern_group_0_36.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "CNRS_pattern_229.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_2071.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_3967.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_8838.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_2621.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "LBNL_D_pattern_group_0_490.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "EMPA_pattern_309.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_19027.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "LBNL_D_pattern_group_1_58.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_15545.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_16091.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_14592.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_4137.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_10881.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_10297.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_16178.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_10309.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_2935.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_6082.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_6037.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_2690.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_11053.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_7293.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_16944.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_603.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_12327.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_5967.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_18225.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_19206.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "HKUST_B_pattern_52.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_6954.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_5850.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_17556.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_17394.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "EMPA_pattern_266.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_11562.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_13133.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_792.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_17163.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_18609.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "HKUST_pattern_14.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_17282.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_15641.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_11033.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "USC_pattern_230.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_6101.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_3445.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_2432.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_2400.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_12698.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_4018.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_10553.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_15119.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_8445.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_8986.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_5841.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_18556.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_16716.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_13287.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_10610.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_18411.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      },
+      {
+        "filename": "INT_pattern_10853.xy",
+        "error": "could not convert string '2theta' to float64 at row 0, column 1."
+      }
+    ]
+  }
+}

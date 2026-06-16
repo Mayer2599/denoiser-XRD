@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments
+.venv/
+venv/
+env/
+.env
+.env.*
+
+# Jupyter / notebook checkpoints
+.ipynb_checkpoints/
+
+# Training/runtime outputs
+logs/
+checkpoints/
+*.log
+*.tmp
+
+# Local external/reference downloads
+.1deCIFer_repo/
+decifer_v1_ckpt.pt
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

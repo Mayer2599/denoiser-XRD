@@ -1,0 +1,335 @@
+Langkah 4: Split Data Training/Validation
+Buat script: 4_split_dataset.py
+Strategi split:
+
+Training: 80% (19,334 pairs)
+Validation: 20% (4,834 pairs)
+Shuffle: Random seed untuk reproducibility
+
+Penting:
+
+Pastikan clean-noisy tetap paired!
+Stratified split berdasarkan karakteristik (jika perlu)
+
+Output:
+data/
+└── processed/
+    ├── train/
+    │   ├── clean/      (19,334 files)
+    │   └── noisy/      (19,334 files)
+    └── val/
+        ├── clean/      (4,834 files)
+        └── noisy/      (4,834 files)
+Estimasi waktu: 5-10 menit
+
+FASE 2: MODIFIKASI KODE TRAINING 🏗️
+Langkah 5: Tambah DataLoader di Kode
+Buat file baru: xrd_dataset.py
+Isi file:
+A. XRDDataset Class (PyTorch Dataset)
+
+Load noisy dan clean data
+Apply Anscombe transform
+Apply normalization
+Return torch tensors
+
+B. get_dataloaders Function
+
+Create DataLoader untuk train dan val
+Batch size: 16 atau 32
+Shuffle: True untuk train, False untuk val
+Num workers: 4 (multiprocessing)
+
+
+Langkah 6: Buat Training Script
+Buat file baru: train_denoiser.py
+Struktur training script:
+A. Import & Setup
+
+Load model (UNet1D atau SimpleCNN1D)
+Setup device (GPU/CPU)
+Setup optimizer (Adam, lr=0.001)
+Setup loss function (MSE)
+Setup learning rate scheduler
+
+B. Training Loop
+For each epoch:
+    Training phase:
+        For each batch:
+            1. Load noisy dan clean
+            2. Preprocessing (Anscombe + normalize)
+            3. Forward pass: prediction = model(noisy)
+            4. Calculate loss: MSE(prediction, clean)
+            5. Backward pass
+            6. Update weights
+            7. Log loss
+    
+    Validation phase:
+        For each batch:
+            1. Load noisy dan clean
+            2. Forward pass (no gradient)
+            3. Calculate val loss
+            4. Log val loss
+    
+    Save checkpoint:
+        - Save model weights
+        - Save optimizer state
+        - Save loss history
+        
+    Early stopping:
+        - If val loss tidak turun 10 epoch → stop
+C. Logging & Monitoring
+
+Print loss tiap epoch
+Save loss history ke CSV
+Plot training curves
+Save best model (lowest val loss)
+
+
+Langkah 7: Configuration File
+Buat file: config.yaml (atau config.py)
+Isi:
+yaml# Data paths
+data_dir: "C:/Users/Lenovo/Documents/xrdAI_withoutmatch3_v2/data"
+processed_dir: "data/processed"
+
+# Model
+model_type: "unet"  # atau "simple_cnn"
+base_channels: 32
+
+# Training
+batch_size: 16
+learning_rate: 0.001
+weight_decay: 1e-5
+epochs: 100
+early_stopping_patience: 10
+
+# Device
+device: "cuda"  # atau "cpu"
+
+# Paths
+save_dir: "models/saved"
+log_dir: "logs"
+
+FASE 3: TRAINING MODEL 🚀
+Langkah 8: Training Pertama (Test Run)
+Command:
+bashpython train_denoiser.py --epochs 5 --batch_size 8 --test_mode
+Test mode:
+
+Hanya pakai 1000 sampel
+5 epoch aja
+Tujuan: pastiin kode jalan
+
+Yang dicek:
+
+Gak ada error? ✅
+Data loading OK? ✅
+Loss dihitung? ✅
+Loss turun (meskipun sedikit)? ✅
+Model weights tersimpan? ✅
+
+Estimasi waktu: 15-30 menit
+
+Langkah 9: Training Sebenarnya
+Command:
+bashpython train_denoiser.py --config config.yaml
+```
+
+**Monitor yang penting:**
+- **Training loss:** Harus turun smooth
+- **Validation loss:** Harus turun (gak naik!)
+- **Gap train-val:** Gak boleh terlalu besar (<30%)
+- **GPU/CPU usage:** Maksimalkan resource
+
+**Estimasi waktu:**
+- **Dengan GPU (GTX 1060+):** 8-24 jam untuk 100 epoch
+- **Dengan CPU:** 3-7 hari (SANGAT LAMA!)
+
+**Rekomendasi:**
+- Pakai GPU! Kalau gak punya:
+  - Google Colab (gratis, ada GPU T4)
+  - Kaggle Notebooks (gratis, ada GPU P100)
+  - Cloud service (AWS, GCP, Azure)
+
+---
+
+#### **Langkah 10: Monitoring Training**
+
+**Buat script:** `monitor_training.py`
+
+**Fitur:**
+- Plot training curves real-time
+- Show current epoch, loss, time remaining
+- Alert jika ada anomali (loss jadi NaN, loss gak turun, dll)
+
+**Tools:**
+- TensorBoard (recommended!)
+- Weights & Biases (W&B)
+- Atau custom matplotlib plots
+
+---
+
+### **FASE 4: EVALUASI MODEL** 📊
+
+#### **Langkah 11: Evaluasi di Validation Set**
+
+**Buat script:** `evaluate_model.py`
+
+**Metrik yang dihitung:**
+- **SNR improvement** (before vs after)
+- **PSNR**
+- **MSE / MAE**
+- **SSIM** (Structural Similarity)
+- **Peak detection accuracy**
+
+**Visualisasi:**
+- Plot 20 sampel random
+- Comparison: noisy vs denoised vs clean
+- Residual plot (noisy - denoised)
+
+**Output:**
+- Metrics CSV file
+- Visualization PDF
+- Summary report
+
+---
+
+#### **Langkah 12: Test di Test Sets**
+
+**Buat script:** `test_on_real_data.py`
+
+**Test secara bertahap:**
+
+**A. Good Quality Baseline (dari grafik yang kamu upload)**
+- 8 grafik good quality
+- Ekspektasi: SNR >10 dB, peak preserve 100%
+
+**B. Moderate Challenge**
+- Amorf: ambil 100 random dari folder amorf (28,771)
+- Background: ambil semua 351 files
+- Dynamic range: ambil semua 72 files
+- Ekspektasi: SNR >8 dB, peak preserve >90%
+
+**C. Extreme Challenge**
+- Extreme noise: ambil 500 random dari folder extreme_noise (39,563)
+- Ekspektasi: SNR >3 dB, peak preserve >70%
+
+**Untuk setiap kategori:**
+- Hitung metrik agregat (mean, std, min, max)
+- Visualisasi distribusi hasil
+- Identifikasi failure cases
+
+---
+
+#### **Langkah 13: Analisis Failure Cases**
+
+**Tujuan:** Understand kenapa model gagal di beberapa kasus
+
+**Analisis:**
+- Ambil 10 worst cases (SNR improvement terendah)
+- Plot dan analisis detail
+- Identifikasi pattern:
+  - Gagal di noise tinggi?
+  - Gagal di puncak kecil?
+  - Gagal di dynamic range ekstrem?
+
+**Output:**
+- Failure analysis report
+- Rekomendasi improvement
+
+---
+
+### **FASE 5: ITERASI & IMPROVEMENT** 🔧
+
+#### **Langkah 14: Hyperparameter Tuning**
+
+**Kalau hasil kurang memuaskan, coba:**
+
+**A. Architecture:**
+- Ganti SimpleCNN → UNet1D (lebih bagus preserve detail)
+- Adjust channels (32 → 64 → 128)
+- Tambah/kurangi layers
+
+**B. Training:**
+- Learning rate: 0.001 → 0.0005 atau 0.0001
+- Batch size: 16 → 32 (kalau GPU cukup)
+- Epochs: 100 → 150 atau 200
+
+**C. Loss Function:**
+- MSE → MAE (lebih robust)
+- Tambah Peak Preservation Loss
+- Weighted loss (kasih bobot lebih di area puncak)
+
+**D. Data Augmentation:**
+- Shift 2theta sedikit (±1°)
+- Scale intensity (×0.8 sampai ×1.2)
+- Add more noise variations
+
+---
+
+#### **Langkah 15: Training Ulang dengan Improvement**
+
+**Strategi:**
+1. Backup model lama
+2. Apply changes
+3. Training ulang
+4. Evaluasi lagi
+5. Bandingkan dengan model lama
+
+**Catat semua eksperimen:**
+```
+Experiment Log:
+- Exp 1: SimpleCNN, lr=0.001, epochs=100 → SNR +8.5 dB
+- Exp 2: UNet1D, lr=0.001, epochs=100 → SNR +11.2 dB ✅ BETTER!
+- Exp 3: UNet1D, lr=0.0005, epochs=150 → SNR +12.8 dB ✅ BEST!
+
+FASE 6: FINALISASI & DEPLOYMENT 🎯
+Langkah 16: Final Model Selection
+Pilih model terbaik berdasarkan:
+
+Validation loss (lowest)
+Test set performance (all categories)
+Inference speed (berapa lama process 1 file?)
+Model size (berapa MB?)
+
+Trade-off:
+
+UNet1D: performa terbaik, tapi lambat & besar
+SimpleCNN: performa lumayan, cepat & kecil
+
+
+Langkah 17: Create Inference Pipeline
+Buat script: denoise_xrd.py
+Cara pakai:
+bashpython denoise_xrd.py --input path/to/noisy.txt --output path/to/clean.txt
+Pipeline:
+
+Load model weights
+Load input XRD
+Preprocessing (resample, Anscombe, normalize)
+Inference (forward pass)
+Postprocessing (inverse normalize, inverse Anscombe)
+Save output
+(Optional) Create comparison plot
+
+Fitur tambahan:
+
+Batch processing (multiple files)
+Progress bar
+Automatic plot generation
+Quality metrics report
+
+
+Langkah 18: Batch Processing Script
+Buat script: batch_denoise.py
+Untuk denoise banyak file sekaligus:
+bashpython batch_denoise.py --input_folder data/tests/extreme_noise --output_folder results/denoised
+Fitur:
+
+Process semua file di folder
+Save results dengan nama sama
+Generate summary report
+Log processing time per file
+
+

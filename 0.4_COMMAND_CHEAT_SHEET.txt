@@ -1,0 +1,345 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                    XRD DENOISING AI - COMMAND CHEAT SHEET                      ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+═══════════════════════════════════════════════════════════════════════════════
+📦 INSTALLATION & SETUP
+═══════════════════════════════════════════════════════════════════════════════
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Install PyTorch with CUDA (for GPU)
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+
+# Install PyTorch CPU only
+pip install torch torchvision
+
+# Verify setup
+python quick_start.py
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🔧 DATA PREPARATION
+═══════════════════════════════════════════════════════════════════════════════
+
+# Split dataset (default 80/20)
+python 4_split_dataset.py
+
+# Split with custom ratio
+python 4_split_dataset.py --train_ratio 0.85
+
+# Split with custom paths
+python 4_split_dataset.py \
+    --clean_dir data/processed/clean \
+    --noisy_dir data/processed/noisy \
+    --output_dir data/processed \
+    --train_ratio 0.8 \
+    --seed 42
+
+# Test DataLoader
+python xrd_dataset.py
+
+# Test Model
+python models.py
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🎯 TRAINING
+═══════════════════════════════════════════════════════════════════════════════
+
+# TEST TRAINING (Quick test - 5 epochs)
+python train_denoiser.py --test_mode --epochs 5 --batch_size 8
+
+# FULL TRAINING - GPU (Recommended)
+python train_denoiser.py --model unet --epochs 100 --batch_size 16 --device cuda
+
+# FULL TRAINING - CPU (Very slow!)
+python train_denoiser.py --model simple_cnn --epochs 50 --batch_size 4 --device cpu
+
+# Training with custom learning rate
+python train_denoiser.py --model unet --epochs 100 --lr 0.0005
+
+# Training with larger model
+python train_denoiser.py --model unet --epochs 100 --batch_size 16
+# (Edit config.py: BASE_CHANNELS = 64)
+
+# Resume training from checkpoint
+python train_denoiser.py --resume checkpoints/checkpoint_epoch_50.pth --epochs 100
+
+# Training with all custom parameters
+python train_denoiser.py \
+    --model unet \
+    --epochs 150 \
+    --batch_size 16 \
+    --lr 0.001 \
+    --device cuda
+
+
+═══════════════════════════════════════════════════════════════════════════════
+📊 EVALUATION
+═══════════════════════════════════════════════════════════════════════════════
+
+# Evaluate on validation set
+python evaluate_model.py \
+    --model models/saved/best_model.pth \
+    --data_clean data/processed/val/clean \
+    --data_noisy data/processed/val/noisy \
+    --output_dir evaluation_results
+
+# Evaluate with limited samples
+python evaluate_model.py \
+    --model models/saved/best_model.pth \
+    --data_clean data/processed/val/clean \
+    --data_noisy data/processed/val/noisy \
+    --num_samples 1000
+
+# Evaluate on custom test set
+python evaluate_model.py \
+    --model models/saved/best_model.pth \
+    --data_clean data/tests/amorf/clean \
+    --data_noisy data/tests/amorf/noisy \
+    --output_dir evaluation_results/amorf
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🔍 FAILURE ANALYSIS
+═══════════════════════════════════════════════════════════════════════════════
+
+# Analyze worst performing samples
+python analyze_failures.py \
+    --model models/saved/best_model.pth \
+    --data_clean data/processed/val/clean \
+    --data_noisy data/processed/val/noisy \
+    --output_dir failure_analysis
+
+# Analyze with more worst cases
+python analyze_failures.py \
+    --model models/saved/best_model.pth \
+    --data_clean data/processed/val/clean \
+    --data_noisy data/processed/val/noisy \
+    --num_worst 20 \
+    --output_dir failure_analysis
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🎨 INFERENCE - Single File
+═══════════════════════════════════════════════════════════════════════════════
+
+# Denoise single file
+python denoise_xrd.py \
+    --model models/saved/best_model.pth \
+    --input data/noisy_sample.txt \
+    --output results/denoised_sample.txt \
+    --plot
+
+# Denoise without plot
+python denoise_xrd.py \
+    --model models/saved/best_model.pth \
+    --input data/noisy_sample.txt \
+    --output results/denoised_sample.txt
+
+# Denoise on CPU
+python denoise_xrd.py \
+    --model models/saved/best_model.pth \
+    --input data/noisy_sample.txt \
+    --device cpu
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🔄 INFERENCE - Batch Processing
+═══════════════════════════════════════════════════════════════════════════════
+
+# Batch denoise all files in folder
+python batch_denoise.py \
+    --model models/saved/best_model.pth \
+    --input_folder data/tests/my_data \
+    --output_folder results/denoised
+
+# Batch with plots
+python batch_denoise.py \
+    --model models/saved/best_model.pth \
+    --input_folder data/tests/my_data \
+    --output_folder results/denoised \
+    --plots
+
+# Batch with file limit
+python batch_denoise.py \
+    --model models/saved/best_model.pth \
+    --input_folder data/tests/extreme_noise \
+    --output_folder results/extreme_denoised \
+    --max_files 500
+
+# Batch with custom pattern
+python batch_denoise.py \
+    --model models/saved/best_model.pth \
+    --input_folder data/tests \
+    --output_folder results/denoised \
+    --pattern "*.dat"
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🎛️ MASTER CLI TOOL
+═══════════════════════════════════════════════════════════════════════════════
+
+# Show help
+python xrd_denoiser.py --help
+
+# Show system info
+python xrd_denoiser.py info
+
+# Show model info
+python xrd_denoiser.py info --model models/saved/best_model.pth
+
+# Split dataset
+python xrd_denoiser.py split \
+    --clean_dir data/processed/clean \
+    --noisy_dir data/processed/noisy
+
+# Train
+python xrd_denoiser.py train --model unet --epochs 100 --batch_size 16
+
+# Evaluate
+python xrd_denoiser.py evaluate \
+    --model models/saved/best_model.pth \
+    --data_clean data/processed/val/clean \
+    --data_noisy data/processed/val/noisy
+
+# Denoise single file
+python xrd_denoiser.py denoise \
+    --model models/saved/best_model.pth \
+    --input file.txt
+
+# Batch process
+python xrd_denoiser.py batch \
+    --model models/saved/best_model.pth \
+    --input_folder data/tests \
+    --output_folder results
+
+# Analyze failures
+python xrd_denoiser.py analyze \
+    --model models/saved/best_model.pth \
+    --data_clean data/processed/val/clean \
+    --data_noisy data/processed/val/noisy
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🔧 TRAINING CONFIGURATIONS
+═══════════════════════════════════════════════════════════════════════════════
+
+# Experiment 1: SimpleCNN baseline
+python train_denoiser.py --model simple_cnn --epochs 100 --batch_size 16
+
+# Experiment 2: UNet baseline
+python train_denoiser.py --model unet --epochs 100 --batch_size 16
+
+# Experiment 3: UNet with lower learning rate
+python train_denoiser.py --model unet --epochs 150 --lr 0.0005 --batch_size 16
+
+# Experiment 4: UNet with larger channels (edit config.py: BASE_CHANNELS=64)
+python train_denoiser.py --model unet --epochs 100 --batch_size 16
+
+# Experiment 5: Small batch size (for limited GPU memory)
+python train_denoiser.py --model unet --epochs 100 --batch_size 8
+
+
+═══════════════════════════════════════════════════════════════════════════════
+📈 MONITORING
+═══════════════════════════════════════════════════════════════════════════════
+
+# Check training progress
+cat logs/training_history.json
+
+# View training curves
+# Open: logs/training_curves.png
+
+# Check latest checkpoint
+ls -lht checkpoints/
+
+# View best model info
+python xrd_denoiser.py info --model models/saved/best_model.pth
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🐛 DEBUGGING
+═══════════════════════════════════════════════════════════════════════════════
+
+# Test DataLoader
+python xrd_dataset.py
+
+# Test Models
+python models.py
+
+# Verify system
+python quick_start.py
+
+# Test with minimal settings
+python train_denoiser.py --test_mode --epochs 2 --batch_size 4
+
+
+═══════════════════════════════════════════════════════════════════════════════
+💾 FILE LOCATIONS
+═══════════════════════════════════════════════════════════════════════════════
+
+TRAINING OUTPUT:
+  models/saved/best_model.pth           - Best model weights
+  checkpoints/checkpoint_epoch_X.pth    - Training checkpoints
+  logs/training_history.json            - Loss history
+  logs/training_curves.png              - Training plots
+
+EVALUATION OUTPUT:
+  evaluation_results/detailed_results.csv       - Per-sample metrics
+  evaluation_results/statistics.csv             - Aggregate statistics
+  evaluation_results/denoising_examples.png     - Example results
+  evaluation_results/metric_distributions.png   - Metric distributions
+
+FAILURE ANALYSIS OUTPUT:
+  failure_analysis/worst_cases.png              - Worst performing samples
+  failure_analysis/best_cases.png               - Best performing samples
+  failure_analysis/failure_analysis_report.txt  - Detailed analysis
+
+BATCH PROCESSING OUTPUT:
+  results/batch_processing_results.csv          - Processing log
+  results/summary_statistics.csv                - Summary metrics
+  results/batch_results_distribution.png        - Distribution plots
+
+
+═══════════════════════════════════════════════════════════════════════════════
+⚡ QUICK WORKFLOWS
+═══════════════════════════════════════════════════════════════════════════════
+
+COMPLETE TRAINING WORKFLOW:
+  1. python 4_split_dataset.py
+  2. python train_denoiser.py --test_mode --epochs 5
+  3. python train_denoiser.py --model unet --epochs 100
+  4. python evaluate_model.py --model models/saved/best_model.pth --data_clean data/processed/val/clean --data_noisy data/processed/val/noisy
+  5. python analyze_failures.py --model models/saved/best_model.pth --data_clean data/processed/val/clean --data_noisy data/processed/val/noisy
+
+QUICK TEST WORKFLOW:
+  1. python quick_start.py
+  2. python train_denoiser.py --test_mode --epochs 2
+  3. python denoise_xrd.py --model checkpoints/checkpoint_epoch_2.pth --input test.txt
+
+PRODUCTION INFERENCE WORKFLOW:
+  1. python batch_denoise.py --model models/saved/best_model.pth --input_folder data/production --output_folder results/production
+  2. Check: results/production/summary_statistics.csv
+
+
+═══════════════════════════════════════════════════════════════════════════════
+💡 PRO TIPS
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ Always start with --test_mode to verify everything works
+✓ Monitor logs/training_curves.png during training
+✓ Save experiment configs and results in separate folders
+✓ Use Google Colab for free GPU: https://colab.research.google.com/
+✓ Resume training if interrupted with --resume
+✓ Compare multiple models by training with different configs
+✓ Analyze failures to understand model weaknesses
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                            HAPPY TRAINING! 🚀
+
+═══════════════════════════════════════════════════════════════════════════════

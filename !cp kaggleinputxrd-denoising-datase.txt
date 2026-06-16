@@ -1,0 +1,5 @@
+!cp /kaggle/input/xrd-denoising-dataset/models.py /kaggle/working/
+!cp /kaggle/input/xrd-denoising-dataset/xrd_dataset.py /kaggle/working/
+
+
+models.py - Arsitektur SimpleCNN1D & UNet1D

@@ -1,0 +1,14 @@
+/models/experiment2
+--> best_models adalah checkpoints terbaik epoch 5
+--> final_model adalah checkpoints epoch 100
+--> 1a adalah running epoch 5
+--> 1b adalah running epoch 100
+
+Jadi, final_model1a = best_model1a = best_model1b.
+
+Sehingga,
+--> di evaluation_results ditampilkan xxxx_xxxx1b aja; sedangkan data xxxx_xxxxbm tidak perlu!!!!
+--> di analyze_failure ditampilkan xxxx_xxxx1b aja; sedangkan data xxxx_xxxxbm tidak perlu!!!!
+
+Menjalankan analyze failure:
+9analyze_failures.py --model "models/experiment3/final_model.pth" --data_clean "data/processed/val/clean" --data_noisy "data/processed/val/noisy" --output_dir "analyze_failures/experiment3" --batch_size 8 --device cpu

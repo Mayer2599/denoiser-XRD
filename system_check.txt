@@ -1,0 +1,20 @@
+
+SYSTEM INFO
+-----------
+PyTorch: 2.10.0+cpu
+CUDA: False
+Device: CPU
+
+DATA INFO
+---------
+Clean files: 24160
+Noisy files: 24160
+Training ready: False
+
+NEXT STEPS
+----------
+1. python 4_split_dataset.py (if not done)
+2. python train_denoiser.py --test_mode --epochs 5
+3. python train_denoiser.py --model unet --epochs 100
+4. python evaluate_model.py --model models/saved/best_model.pth
+5. python denoise_xrd.py --model models/saved/best_model.pth --input file.txt

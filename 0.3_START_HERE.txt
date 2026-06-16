@@ -1,0 +1,213 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                ║
+║                    XRD DENOISING AI - TRAINING PIPELINE                        ║
+║                         Complete Script Package                                ║
+║                                                                                ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+📋 MULAI DARI SINI!
+═══════════════════════════════════════════════════════════════════════════════
+
+1. BACA DULU:
+   ├─ FILE_SUMMARY.txt         ⭐ Overview semua file
+   └─ README.md                ⭐ Dokumentasi lengkap
+
+2. SETUP:
+   ├─ requirements.txt         → Install dependencies
+   └─ quick_start.py          → Verify setup
+
+3. TRAINING:
+   ├─ 4_split_dataset.py      → Split data train/val
+   ├─ xrd_dataset.py          → Dataset & DataLoader
+   ├─ models.py               → Model architectures
+   ├─ config.py               → Configuration
+   └─ train_denoiser.py       ⭐ MAIN TRAINING SCRIPT
+
+4. EVALUATION:
+   ├─ evaluate_model.py       → Model evaluation
+   └─ analyze_failures.py     → Failure analysis
+
+5. INFERENCE:
+   ├─ denoise_xrd.py          → Single file denoising
+   ├─ batch_denoise.py        → Batch processing
+   └─ xrd_denoiser.py         ⭐ MASTER CLI TOOL
+
+6. UTILITIES:
+   └─ monitor_training.py     → Training monitor
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🚀 QUICK START
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 1: Install Dependencies
+────────────────────────────
+pip install -r requirements.txt
+
+STEP 2: Verify Setup
+────────────────────
+python quick_start.py
+
+STEP 3: Split Dataset (jika belum)
+──────────────────────────────────
+python 4_split_dataset.py
+
+STEP 4: Test Training (5 epochs)
+────────────────────────────────
+python train_denoiser.py --test_mode --epochs 5
+
+STEP 5: Full Training
+─────────────────────
+# Dengan GPU (recommended):
+python train_denoiser.py --model unet --epochs 100 --batch_size 16 --device cuda
+
+# Dengan CPU (sangat lambat!):
+python train_denoiser.py --model simple_cnn --epochs 50 --batch_size 4 --device cpu
+
+STEP 6: Evaluate Model
+──────────────────────
+python evaluate_model.py \
+    --model models/saved/best_model.pth \
+    --data_clean data/processed/val/clean \
+    --data_noisy data/processed/val/noisy
+
+STEP 7: Use for Inference
+─────────────────────────
+# Single file:
+python denoise_xrd.py --model models/saved/best_model.pth --input file.txt
+
+# Batch:
+python batch_denoise.py --model models/saved/best_model.pth \
+    --input_folder data/tests --output_folder results
+
+
+═══════════════════════════════════════════════════════════════════════════════
+📁 FILE DESCRIPTIONS
+═══════════════════════════════════════════════════════════════════════════════
+
+TRAINING SCRIPTS:
+─────────────────
+4_split_dataset.py      → Split dataset 80/20 train/val
+xrd_dataset.py          → PyTorch Dataset with preprocessing
+models.py               → SimpleCNN1D & UNet1D architectures
+config.py               → Training configuration
+train_denoiser.py       → Main training script ⭐
+monitor_training.py     → Training monitoring
+
+EVALUATION SCRIPTS:
+───────────────────
+evaluate_model.py       → Comprehensive evaluation (SNR, PSNR, MSE, MAE, SSIM)
+analyze_failures.py     → Identify & analyze worst cases
+
+INFERENCE SCRIPTS:
+──────────────────
+denoise_xrd.py          → Denoise single file
+batch_denoise.py        → Batch denoise multiple files
+xrd_denoiser.py         → Master CLI tool ⭐
+
+DOCUMENTATION:
+──────────────
+README.md               → Full documentation
+FILE_SUMMARY.txt        → Script overview
+requirements.txt        → Dependencies
+quick_start.py          → Setup verification
+
+
+═══════════════════════════════════════════════════════════════════════════════
+⏱️ TIMELINE
+═══════════════════════════════════════════════════════════════════════════════
+
+Setup & Data Prep:    15-20 minutes
+Test Training:        15-30 minutes
+Full Training:        8-24 hours (GPU) / 3-7 days (CPU)
+Evaluation:           10-30 minutes
+Inference:            < 1 minute per file
+
+
+═══════════════════════════════════════════════════════════════════════════════
+💡 TIPS
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ Gunakan GPU untuk training (WAJIB!)
+  → Google Colab: https://colab.research.google.com/ (FREE GPU)
+  → Kaggle: https://www.kaggle.com/ (FREE GPU)
+
+✓ Start dengan test mode untuk verify setup:
+  → python train_denoiser.py --test_mode --epochs 5
+
+✓ Monitor training progress:
+  → Check logs/training_curves.png
+  → Check checkpoints/ for saved models
+
+✓ Jika loss tidak turun:
+  → Lower learning rate: --lr 0.0005
+  → Try different model: --model simple_cnn
+
+✓ Jika GPU out of memory:
+  → Reduce batch size: --batch_size 8 (or 4)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🎯 SUCCESS CRITERIA
+═══════════════════════════════════════════════════════════════════════════════
+
+GOOD MODEL:
+  • SNR Improvement > 8 dB
+  • Validation Loss < 0.01
+  • SSIM > 0.85
+
+EXCELLENT MODEL:
+  • SNR Improvement > 12 dB
+  • Validation Loss < 0.005
+  • SSIM > 0.90
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🔧 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+PROBLEM: CUDA out of memory
+SOLUTION: python train_denoiser.py --batch_size 8
+
+PROBLEM: Training too slow
+SOLUTION: Use GPU (Google Colab free) or --model simple_cnn
+
+PROBLEM: Loss not decreasing
+SOLUTION: python train_denoiser.py --lr 0.0005
+
+PROBLEM: Loss becomes NaN
+SOLUTION: python train_denoiser.py --lr 0.0001
+
+PROBLEM: Import errors
+SOLUTION: pip install -r requirements.txt
+
+
+═══════════════════════════════════════════════════════════════════════════════
+📞 NEED HELP?
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Check error message carefully
+2. Verify all paths are correct
+3. Test with --test_mode first
+4. Read README.md for detailed docs
+5. Check FILE_SUMMARY.txt for script details
+
+
+═══════════════════════════════════════════════════════════════════════════════
+✅ CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+□ Dependencies installed (pip install -r requirements.txt)
+□ Setup verified (python quick_start.py)
+□ Data split completed (python 4_split_dataset.py)
+□ Test training successful (python train_denoiser.py --test_mode)
+□ Full training started
+□ Model evaluated (python evaluate_model.py)
+□ Ready for inference!
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                        GOOD LUCK WITH YOUR TRAINING! 🚀
+                        
+═══════════════════════════════════════════════════════════════════════════════
