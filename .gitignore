@@ -18,6 +18,7 @@ env/
 
 # Training/runtime outputs
 logs/
+denoised_outputs/
 checkpoints/
 *.log
 *.tmp

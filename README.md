@@ -59,16 +59,42 @@ Cek GPU:
 python cekcuda+gpu.py
 ```
 
-Denoising satu file XRD:
+### Denoising satu file XRD
+
+Command utama untuk inference adalah `denoise.py`. Secara default script memakai model `models/experiment3/final_model3b.pth`.
 
 ```bash
-python _10a_denoise_xrd.py
+python denoise.py "path/to/sample.xy"
 ```
 
-Denoising batch:
+Tentukan model dan output secara eksplisit:
 
 ```bash
-python _10b_batch_denoise.py
+python denoise.py "path/to/sample.xy" --model models/experiment3/final_model3b.pth --output results/sample_denoised.xy
+```
+
+Simpan plot perbandingan:
+
+```bash
+python denoise.py "path/to/sample.xy" --plot
+```
+
+Pakai CPU:
+
+```bash
+python denoise.py "path/to/sample.xy" --device cpu
+```
+
+### Denoising satu folder
+
+```bash
+python denoise.py "path/to/folder" --output denoised_outputs --pattern "*.xy"
+```
+
+Untuk mencari file di subfolder:
+
+```bash
+python denoise.py "path/to/folder" --output denoised_outputs --pattern "*.xy" --recursive
 ```
 
 Evaluasi model:
